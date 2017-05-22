@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>奖励信息</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<table style="color: green" border="2">
+	<td>使用时间</td><td>服务器名称</td><td>usernum</td><td>物品名称</td><td>全局key</td><td>姓名</td><td>电话</td><td>地址</td><td>Cmake</td>
+	{%for m in data%}
+		<tr>
+		<td>{{m.used_time}}</td><td>{{m.host_name}}</td><td>{{m.user_num}}</td><td>{{m.item_name}}</td><td>{{m.item_gbl_key}}</td><td>{{m.user_real_name}}</td><td>{{m.user_telephone}}</td><td>{{m.user_address_provience}}</td><td>{{m.item_cmake}}</td>
+		<tr>
+	{%endfor%}
+</table>
+
+</body>
+</html>

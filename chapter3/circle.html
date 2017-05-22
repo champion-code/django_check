@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>the dynamic circle</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="src/d3.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	//添加一个circle
+	var width = 1300;		//svg的宽度
+	var height = 1300;		//svg的高度
+	var cx1 = 100;      	//circle1圆心的x坐标
+	var cy1 = 100;			//circle1圆心的y坐标
+	var cx2 = 300;			//circle2圆心的x坐标
+	var cy2 = 200;			//circle2圆心的y坐标
+	var cr = 45;			//circle的半径
+	var svg = d3.select("body")
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+	//添加circle
+	var circle1 = svg.append("circle")
+				.attr("cx", cx1)
+				.attr("cy", cy1)
+				.attr("r", cr)
+				.attr("fill", "green");
+
+	//给circle添加动画 在1秒内将圆心由100变到300
+	
+		circle1.transition()
+			.duration(1000)
+			.attr("cx", cx2);
+		
+
+		//添加circle2
+		var circle2 = svg.append("circle")
+					.attr("cx", cx1)
+					.attr("cy", cy2)
+					.attr("r", cr)
+					.attr("fill", "green");
+
+		circle2.transition()
+			.duration(1500)
+			.attr("cx", 300)
+			.attr("fill", "red");
+
+		var circle3 = svg.append("circle")
+				.attr("cx", cx1)
+				.attr("cy", cy1+cy2)
+				.attr("r", cr)
+				.attr("fill", "green");
+	try{
+		circle3.transition()
+			.duration(2000)
+			.ease(d3.easeBounce)
+			.attr("cx", 300)
+			.style("fill","red")
+			.attr("r", 25);
+
+
+	}catch(e){
+				alert(e.name+":"+e.message);
+			}	
+
+
+
+</script>
+</body>
+</html>

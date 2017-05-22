@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>heatMap with d3.js</title>
+	<meta charset="utf-8">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+<svg id="heatmap-canvas" style="height: 200px"></svg>
+
+<script type="text/javascript">
+d3.csv("{%static 'heatmap.csv'%}", function(error, data){
+	data.forEach(function(d){
+		d.score =+d.score;
+		d.row =+d.row;
+		d.col =+d.col;
+	});
+
+	var gridSize = 10;
+	var height = gridSize;
+	var width = gridSize;
+	var rectPadding = 60;
+
+	var clolorLow = "#110011";
+	var colorMed = "#444444";
+	var colorHigh = "#F0F0F0";
+
+
+	var mySVG = d3.select("heatmap-canvas")
+			.style('top', 0)
+			.style('left', 0);
+	var colorScale = d3.scaleLinear()
+		.domain([-1,0,1])
+		.range([clolorLow, colorMed, colorHigh]);
+
+	var rowNest = d3.nest()
+			.key(function(d){return d.row})
+			.key(function(d){return d.col});
+	var dataByRows = rowNest.entries(data);
+	console.log(dataByRows);
+
+
+
+	var heatMap = mySVG.selectAll(".heatmap")
+    	.data(data, function(d) { return d.col + ':' + d.row; })
+  		.enter().append("svg:rect")
+    	.attr("x", function(d) { return d.row * w; })
+    	.attr("y", function(d) { return d.col * h; })
+    	.attr("width", function(d) { return w; })
+    	.attr("height", function(d) { return h; })
+    	.style("fill", function(d) { return colorScale(d.score); });
+
+
+});
+
+</script>
+
+</body>
+</html>

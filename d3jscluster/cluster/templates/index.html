@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Reward Test</title>
+	<meta charset="utf-8">
+	<style>
+
+      .col-md{
+      		float:left;
+      }
+	</style>
+	<link href="/static/bootstrap-3.3.1-dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/Flat-UI-Pro-1.2.5/css/flat-ui.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/font.css">
+    <script src="/static/js/jquery-1.9.1.min.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/bootstrap.min.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/bootstrap-select.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/bootstrap-switch.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/flatui-checkbox.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/flatui-radio.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/jquery.tagsinput.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/jquery.placeholder.js"></script>
+    <script src="/static/Flat-UI-Pro-1.2.5/js/application.js"></script>
+    <script src="/static/js/rewardcheck.js"></script>
+</head>
+<body>
+       <nav class="navbar navbar-inverse navbar-lg" role="navigation">
+               <div class="navbar-header">
+                    <a href="http://xy2qa.nie.netease.com" class="navbar-brand"><img src="http://ngdsb.hinews.cn/resfile/2013-11-01/029/ng20131101_029b001.jpg" style="margin-top:-20px;height: 60px;width: 70px;"/></a>
+                    <a class="navbar-brand" href="/">实物奖励检查</a>
+               </div>
+               <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="off" id="menu_check_result"><a href="/static_check/">奖励上传</a></li>
+                        <li class="off" id="menu_simulate_check"><a href="/static_check/simulate_check">结果分析</a></li>            
+                        <li class="off" id="menu_check_result2"><a href="http://km.netease.com/profile/xy2_studio#/wiki/item/6300">使用帮助</a></li>
+                    </ul>
+                </div>
+       </nav>
+
+<div  syte="width:1500">
+<div class="layout">
+    <div ctyle="border-radius:4px;background-color:#f7f7f9; border:1px solid #e1e1e8;">
+        <div >
+            <form id="form-reward" enctype="multipart/form-data"  method="POST"  >
+            	<p class="col-md">活动名称：</p>
+                <input class="col-md" id="s_activity_name" type="text" name="reward_huodong_name" value="" placeholder="活动的名称,如:2017端午活动" >
+                 <p class="col-md">奖励CMake： </p>
+                <input class="col-md" id="s__cmake" type="text" name="reward_cmake" value="" placeholder="奖励的Cmake，如：2017元旦活动">
+                 <p class="col-md">奖励上传： </p>
+                <input class="col-md" id="s_file" type="file"  name="myfile" >
+                <button class="btn btn-success" id="btn_upload" onclick="upload_reward()">上传</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div id="debuglog">
+	
+</div>
+
+
+</body>
+</html>

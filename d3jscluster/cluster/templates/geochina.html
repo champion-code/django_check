@@ -1,0 +1,164 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Geo China</title>
+	<meta charset="utf-8">
+<style type="text/css">
+	.path{
+		stroke: "#000";
+		stroke-width:1;
+	}
+	#map{
+		height: auto;
+		margin: 3px;
+		background-color:#FFFFFF;
+		-webkit-border-radius:10px;
+		-moz-border-radius:10px;
+		border-radius: 10px;
+	}
+
+</style>
+</head>
+<script type="text/javascript" src="/static/d3.js"></script>
+<script src="">
+	//https://d3js.org/d3-scale-chromatic.v1.min.js
+</script>
+<body>
+<div id="map"></div>
+<script type="text/javascript">
+
+	/*background-color:#FFE4C4;*/
+	var width = 1080;
+	var height = 860;
+	//绘制svg
+	var svg = d3.select("#map")
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height);
+
+	var colorarr = ["#fff7ec","#fee8c8","#fdd49e","#fdbb84","#fc8d59","#ef6548",
+		"#d7301f","#b30000","#7f0000"];
+
+	var projection = d3.geoMercator()
+						.center([107,31])
+						.scale(550)
+						.translate([width/2 - 207, height/2]);
+
+		var path = d3.geoPath()
+				.projection(projection);
+
+		//var color =d3.scaleOrdinal(d3.schemeCategory20);
+
+		//测试颜色
+		var color = d3.scaleThreshold()
+    	.domain([1, 10, 50, 200, 500, 1000, 2000, 4000])
+    	.range(colorarr);
+
+    	//console.log(d3.schemeOrRd);
+    	var x = d3.scaleSqrt()
+	    .domain([0, 4500])
+	    .rangeRound([100, 550]);
+
+		var g = svg.append("g")
+	    .attr("class", "key")
+	    .attr("transform", "translate(0,40)");
+
+	    //添加比例尺和刻度
+		g.selectAll("rect")
+		  .data(color.range().map(function(d) {
+		      d = color.invertExtent(d);
+		      if (d[0] == null) d[0] = x.domain()[0];
+		      if (d[1] == null) d[1] = x.domain()[1];
+		      return d;
+		    }))
+		  .enter().append("rect")
+		    .attr("height", 8)
+		    .attr("x", function(d) { return x(d[0]); })
+		    .attr("width", function(d) { return x(d[1]) - x(d[0]); })
+		    .attr("fill", function(d) { return color(d[0]); });
+
+
+		g.append("text")
+		    .attr("class", "caption")
+		    .attr("x", x.range()[0])
+		    .attr("y", -6)
+		    .attr("fill", "#000")
+		    .attr("text-anchor", "start")
+		    .attr("font-weight", "bold")
+		    .text("获得奖励数量");
+
+		var axisG = g.append("g");
+		var axisX = d3.axisBottom(x)
+			  	.tickSize(13)
+		    	.tickValues(color.domain());
+		axisG.call(axisX);
+		 
+		/*g.select(".domain")
+		    .remove();  */
+
+
+	d3.json("{%static './geojson/china.json'%}", function(error, root){
+		
+		if(error){
+			return console.error(error);
+		}
+
+		console.log(root.features);
+
+
+
+
+		//添加路径
+		svg.append("g")
+			.selectAll("path")
+			.data(root.features)
+			.enter()
+			.append("path")
+			.attr("class", "path")
+			.attr("fill",function(d,i){
+				//return color(i);
+				
+				return colorarr[((i%6)+3)];
+			})
+			.attr("d", path)
+			.on("mouseover", function(d,i){
+				var thisele=d3.select(this);
+					thisele.attr("fill","#0F0");
+				var centroid = path.centroid(d);
+				svg.append("text")
+					.attr("class", "province_name")
+					.attr("x",(centroid[0]-5) )
+					.attr("y",(centroid[1]-2) )
+					.text(d.properties.name);
+			})
+			.on("mouseout", function(d, i){
+				var thisel=d3.select(this);
+				svg.selectAll(".province_name")
+					.remove();
+				thisel.attr("fill", colorarr[((i%6)+3)]);
+				console.log(colorarr[((i%6)+3)]);
+			})
+			.on("click", function(d,i){
+				var centroid = path.centroid(d);
+				svg.append("text")
+					.attr("x",(centroid[0]-5))
+					.attr("y",(centroid[1]-2))
+					.text(d.properties.name);
+				
+			})
+			;
+
+
+
+
+	});
+
+	d3.json("getjson",function(error,root){
+
+		alert(root.guanxi);
+	});
+
+</script>
+</body>
+</html>

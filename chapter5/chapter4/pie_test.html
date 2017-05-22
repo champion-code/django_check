@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test of alert</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="src/d3.js"></script>
+<body>
+<script type="text/javascript">
+try{
+	
+	var width = 400;     //画布的宽度
+	var height = 400;		//画布的高度
+	var color = d3.scaleOrdinal(d3.schemeCategory10);
+	var dataset = [30, 10, 43, 55, 13];   //数据集
+	var outerRadius = 150; //饼图的外半径
+	var innerRadius = 0;	//饼图的内半径
+	//创建一个布局
+	var pie = d3.pie();
+	//数据转换
+	var piedata = pie(dataset);
+
+	var svg = d3.select("body")              
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+		
+	var arc = d3.arc()  //弧生成器
+			.innerRadius(innerRadius) //内半径
+			.outerRadius(outerRadius); //外半径
+	var arcs = svg.selectAll("g")
+			.data(piedata)
+			.enter()
+			.append("g")
+			.attr("transform", "translate(" + (width/2) +","+ (width/2) +")");
+	arcs.append("path")
+		.attr("fill", function(d, i){
+			return color(i);
+		})
+		.attr("d", function(d, i){
+			return arc(d); //调用弧生成器
+		})
+		.on("click", function(d, i){
+			d3.select(this)
+				.attr("fill", "red");
+		});
+
+	arcs.append("text")
+		.attr("transform",function(d){
+				return "translate(" + arc.centroid(d) + ")" ;
+			})
+		.attr("text-anchor", "middle")
+		.text(function(d){
+			return d.data;
+		});
+}
+catch(e){
+	alert(e.name + ":" + e.message);
+}
+</script>
+</body>
+</html>

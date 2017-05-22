@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chord test web</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	body{
+		font:10px sans-serif;
+	}		
+	.group-tick line{
+		stroke: #000;
+	}
+	.ribbons{
+		fill-opacity:0.67;
+	}
+
+	</style>
+	<script type="text/javascript" src="../src/d3.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	var width = 960;   //宽度
+	var height = 960;  //高度
+
+	//matrix 经过chord转换之后将会分为两个部分
+	//groups：节点
+	//chords：弦  分为source和target
+	var matrix=[
+	[11975, 5871, 8916, 2868],
+	[1951, 10048, 2060, 6171],
+	[8010, 16145, 8090, 8045],
+	[1013,   990,  940, 6907]
+	];
+	var matrix_title=["北京", "上海", "广州", "深圳"];
+
+	//添加一个svg
+	var svg = d3.select("body")
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height);
+
+	var outerRadius = Math.min(width, height)*0.5 - 40,
+		innerRadius = outerRadius - 30;
+
+	var formatValue = d3.formatPrefix(",.0", 1e3);
+
+	//创建一个chord生成器，用于转换数据
+	var chord = d3.chord()
+				.padAngle(0.05)
+				.sortSubgroups(d3.descending);
+
+	//弧生成器
+	var arc = d3.arc()
+			.innerRadius(innerRadius)
+			.outerRadius(outerRadius);
+
+	//带状物
+	var ribbon = d3.ribbon()
+			.radius(innerRadius);
+
+	var color = d3.scaleOrdinal()
+				.domain(d3.range(4))
+				.range(["#000000", "FFDD89", "#957244", "#F26223"]);
+
+	//---------绘制节点---------
+	var g = svg.append("g")
+				.attr("transform", "translate(" + width/2 +"," + height/2 + ")")
+				.datum(chord(matrix));
+	
+	var group = g.append("g")
+				.attr("class", "groups")
+				.selectAll("g")
+				.data(function(chords){	return chords.groups;})
+				.enter()
+				.append("g");
+
+	//path 为svg的路径
+	group.append("path")
+			.style("fill", function(d){return color(d.index);})
+			.style("stroke", function(d){return d3.rgb(color(d.index));})
+			.attr("d", arc);    //d为path的数据
+	//--------------------------------
+
+	//绘制刻度
+	var groupTick = group.selectAll(".group-tick")
+					.data(function(d){return groupTick(d, 1e3)})
+					.enter()
+					.append("g")
+					.attr("class","group-tick")
+					.attr("transform", function(d){return "rotate(" + (d.angle*180 /Math.PI - 90) + ") translate(" + outerRadius + ",0)"; });
+
+	groupTick.append("line")
+			.attr("x2", 6);
+
+	groupTick.filter(function(d){return d.value %5e3 == 0;})
+			.append("text")
+			.attr("x", 8)
+			.attr("dy", ".35em")
+			.attr("transform", function(d){return d.angle > Math.PI?"rotate(180) translate(-16)":null; })
+			.style("text-anchor", function(d){return d.angle>Math.PI?"end":null;})
+			.text(function(d){ return formatValue(d.value)});
+
+	//绘制名称
+	var group_text = g.append("g")
+					.selectAll("text")
+					.data(function(chords){return chords.groups;})
+					.enter()
+					.append("text")
+					.each(function(d,i){
+						d.angle = (d.startAngle + d.endAngle) /2;
+						d.name = matrix_title[i];
+					})
+					.attr("dy", ".35em")
+					.attr("transform", function(d){
+						return "rotate(" + (d.angle*180/Math.PI) +") translate(0,"+-1.0*(outerRadius+40)+")"+((d.angle>Math.PI*3/4&&d.angle<Math.PI*4/4)?"rotate(180)":"");
+					})  //transform 控制文字的旋转（rotate） 和位置偏移（translate）
+					.text(function(d){
+						return d.name;
+					});
+
+
+
+	//绘制连线
+	g.append("g")
+		.attr("class", "ribbons")
+		.selectAll("path")
+		.data(function(chords){return chords;})
+		.enter()
+		.append("path")
+		.attr("d", ribbon)
+		.style("fill", function(d){return color(d.target.index);})
+		.style("stroke", function(d){return d3.rgb(color(d.target.index)).darker();})
+		.on("mouseover", function(d, i){
+			d3.select(this)
+				.style("fill", "red");
+		})
+		.on("mouseout", function(d, i){
+			d3.select(this)
+				.transition()
+				.delay(200)
+				.style("fill", function(d){return color(d.target.index);})
+				.style("stroke", function(d){return d3.rgb(color(d.target.index)).darker();})
+		});
+
+	function groupTick(d, step){
+		var k = (d.endAngle - d.startAngle)/d.value;
+		return d3.range(0, d.value, step).map(function(value){
+			return{value: value, angle:value*k + d.startAngle};
+		});
+	}		
+
+
+
+
+</script>
+
+
+</body>
+</html>

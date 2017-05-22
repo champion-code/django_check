@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>d3js test index</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="src/d3.js"></script>
+	<style type="text/css">
+		.axis path,
+		.axis line{
+			fill: none;
+			stroke: black;
+			shape-rendering: crispEdges;
+		}
+		.axis text{
+			font-family: sans-serif;
+			font-size: 11px;
+		}
+
+	</style>
+</head>
+<body>
+
+<script type="text/javascript">
+	var width = 400;     //画布的宽度
+	var height = 400;		//画布的高度
+	var rectheight = 20;    //举行框的宽度
+	var datatest = [15 , 40, 10, 26, 39, 35]   //数据集
+	var padding = {left:30, right:30, top:30, bottom:20};
+	var rectPadding = 4; //矩形之间的空白
+
+	//创建比例尺	
+	// var linear = d3.scaleLinear()               	
+	// 			.domain([0, d3.max(datatest)])
+	// 			.range([0, 250]);
+
+	try{
+		//x轴的比例尺
+		var xscale = d3.scaleBand()
+				.domain(d3.range(datatest.length))
+				.range([0, width-padding.left - padding.right]);
+
+		//y轴的比例尺
+		var yscale = d3.scaleLinear()
+				.domain([0, d3.max(datatest)])
+				.range([height - padding.top - padding.bottom, 0]);
+
+	
+
+	//定义坐标轴
+	var xAxis = d3.axisBottom()
+			.scale(xscale);
+	var yAxis = d3.axisLeft()
+			.scale(yscale);
+
+	
+	//在body里添加一个SVG画布
+	var svg = d3.select("body")              
+		.append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+	//添加矩形元素
+	var rect = svg.selectAll(".MyRect")
+			.data(datatest)
+			.enter()
+			.append("rect")
+			.attr("class", "MyRect")
+			.attr("transform", "translate( "+ padding.left +"," + padding.top+")")
+			.attr("x", function(d,i){
+				return xscale(i) + rectPadding/2;
+			})
+			.attr("y", function(d){
+				return yscale(d);
+			})
+			.attr("width", xscale.bandwidth() - rectPadding)
+			.attr("height", function(d){
+				return height - padding.top - padding.top - yscale(d);
+			})
+			.attr("fill", "steelblue");
+
+	//添加文字
+
+	var texts = svg.selectAll(".MyText")
+			.data(datatest)
+			.enter()
+			.append("text")
+			.attr("class", "MyText")
+			.attr("transform", "translate("+ padding.left + "," + padding.bottom + ")")
+			.attr("x", function(d, i){
+				return xscale(i) + rectPadding/2;
+			})
+			.attr("y", function(d){
+				return yscale(d);
+			})
+			.attr("dx", function(){
+				return (xscale.bandwidth() - rectPadding)/2;
+			})
+			.attr("dy", function(d){
+				return 20;
+			})
+			.text(function(d){
+				return d;
+			});
+
+	//添加x轴
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate("+ padding.left +"," + (height - padding.bottom) + ")")
+		.call(xAxis);
+	//添加y轴
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(" + padding.left + "," +padding.left + ")")
+		.call(yAxis);
+
+
+	}catch(err){
+		alert(err.name+ ":"+ err.message);
+	}
+	
+	//简单的柱状图
+	// svg.selectAll("rect")
+	// 	.data(datatest)
+	// 	.enter()
+	// 	.append("rect")
+	// 	.attr("x", 20)
+	// 	.attr("y", function(d, i){
+	// 		return i*rectheight;
+	// 	})
+	// 	.attr("width", function(d){
+	// 		return linear(d);
+	// 	})
+	// 	.attr("height", rectheight-2)
+	// 	.attr("fill", "steelblue");
+
+	//添加坐标轴
+	// try{
+	// 	var xAxis = d3.axisBottom()
+	// 			.scale(xscale);
+	// 	var yAxis = d3.axisLeft()
+	// 			.scale(yscale);
+	// 	}catch(err){
+	// 		alert(err.name + ":" + err.message);
+	// 	}
+	// svg.append("g")
+	// 	.attr("class", "axis")
+	// 	.attr("transform", "translate(20,130)")
+	// 	.call(axis);
+
+</script>
+
+</body>
+</html>

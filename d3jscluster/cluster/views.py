@@ -58,7 +58,18 @@ def processreward(request):
 
 #项目主页
 def realreward(request):
+    if request.method == "POST": 
+        uploadreward(request)
     return render_to_response('index.html',{})
+
+#校验上传后处理log
+def get_rewardcheck_log(request):
+    return HttpResponse("处理中，请稍后！") 
+    pass
+
+
+
+
 
 def staticcheck_runlog(request):
     curip = request.META['REMOTE_ADDR']

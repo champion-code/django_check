@@ -3,7 +3,7 @@ function get_runlog()
     $.ajax({
         type : "get", 
         dataType : "text", 
-        url : "/static_check/get_checklog/", 
+        url : "/realreward/rewardcheck_log/", 
         data : "test=" + "cenjoy",
         beforSend : function() {
         },
@@ -25,33 +25,29 @@ function upload_reward(){
     if(!s_branch || !s_date || !check_path)
 {
     //$("#debuglog").html("<h2><font color='red'>检查分支和检查目录不能为空,请补全!</font></h2>");
-    alert("活动名称、奖励cmake、奖励文件不能为空");
+    alert("活动名称、奖励cmake、奖励文件不能为空"+s_branch + s_date + check_path);
     return;
 }
-
-$("#debuglog").html("<br><h3>正在进行静态代码检查，稍等片刻.....</h3>");
+$("#debuglog").html("<br><h3>正在上传文件，稍等片刻.....</h3>");
 c = setInterval(get_runlog,1000);
 //alert(s_ruleid+s_ip+s_delay+s_plr+s_type+s_direction);
-
-
 var formData = new FormData($( "#uploadForm" )[0]);  
-     $.ajax({  
-          url: '/reward_upload' ,  
-          type: 'POST',  
-          data: formData,  
-          async: false,  
-          cache: false,  
-          contentType: false,  
-          processData: false,  
-          success: function (returndata) {  
-              alert(returndata);  
-          },  
-          error: function (returndata) {  
-              alert(returndata);  
-          }  
-     });  
+$.ajax({  
+        type : "post", //使用post方法访问后台
+        dataType : "text", //"json",//返回text格式的数据
+        url : "/reward_upload", //要访问的后台地址 
+        contentType: false,
+        processData: false,
+        success: function (returndata) {  
+            var ret = '<pre name="code" class="c">'+returndata+'</pre>';
+            $("#debuglog").html(ret); 
+        },  
+        error: function (returndata) {  
+            alert(returndata);  
+        }  
+    });  
 
-$.ajax({
+/*$.ajax({
     type : "post", //使用post方法访问后台
     dataType : "text", //"json",//返回text格式的数据
     url : "/static_check/simulate_check/", //要访问的后台地址
@@ -72,4 +68,5 @@ $.ajax({
         dp.SyntaxHighlighter.HighlightAll('code');  
     }
 });
+*/
 }

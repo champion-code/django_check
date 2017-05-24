@@ -19,6 +19,8 @@ function upload_reward(){
     var s_branch = $("#s_activity_name").val();
     var s_date = $("#s_cmake").val();
     var check_path = $("#s_file").val();
+    //debug log
+    console.log(check_path);
     //var check_type = $("#check_type").val();
     var check_type = "normal";
 
@@ -29,21 +31,22 @@ function upload_reward(){
     return;
 }
 $("#debuglog").html("<br><h3>正在上传文件，稍等片刻.....</h3>");
-c = setInterval(get_runlog,1000);
+//c = setInterval(get_runlog,2000);
 //alert(s_ruleid+s_ip+s_delay+s_plr+s_type+s_direction);
-var formData = new FormData($( "#uploadForm" )[0]);  
+var formData = new FormData($("#form_reward")[0]);  
 $.ajax({  
-        type : "post", //使用post方法访问后台
-        dataType : "text", //"json",//返回text格式的数据
-        url : "/reward_upload", //要访问的后台地址 
+        type:"post", //使用post方法访问后台
+        url:"/reward_upload/", //要访问的后台地址 
+        data: formData,  
         contentType: false,
-        processData: false,
+        processData: false, 
         success: function (returndata) {  
-            var ret = '<pre name="code" class="c">'+returndata+'</pre>';
+            var ret = '<br><h3>'+returndata+'</h3>';
             $("#debuglog").html(ret); 
+            $("#s_file").val("");
         },  
         error: function (returndata) {  
-            alert(returndata);  
+            alert("erro:"+returndata);  
         }  
     });  
 

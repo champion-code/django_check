@@ -38,6 +38,8 @@ def home(request):
 def uploadreward(request):
     if request.method == "POST":    # 请求方法为POST时，进行处理  
         myFile =request.FILES.get("myfile", None)    # 获取上传的文件，如果没有文件，则默认为None  
+        #debug
+        print "debuglog:",request.POST.get("reward_huodong_name")
         if not myFile:  
             return HttpResponse("no files for upload!")  
         destination = open(os.path.join(settings.UPLOAD_DIR,request.POST.get("reward_huodong_name")+".xls"),'wb+')    # 打开特定的文件进行二进制的写操作  

@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 # Create your models here.
+#手机归属地库
 class Tel2Addr(models.Model):
 	telnum = models.CharField(max_length=7, primary_key = True)
 	addrprov = models.CharField(max_length=20)
@@ -26,6 +27,7 @@ class Tel2Addr(models.Model):
 	#4.手机号与地址不统一
 	#........待补充
 	#-----------------------------
+#活动奖励发放结果
 class RewardRecord(models.Model):
 	usernum = models.CharField(max_length=10)
 	username = models.CharField(max_length=18)
@@ -44,6 +46,7 @@ class RewardRecord(models.Model):
 	def __unicode__(self):
 		return self.usernum
 
+#奖励方法设定
 
 class RewardActivity(models.Model):
 	actname = models.CharField(max_length = 50)

@@ -33,7 +33,7 @@ function upload_reward(){
 $("#debuglog").html("<br><h3>正在上传文件，稍等片刻.....</h3>");
 //c = setInterval(get_runlog,2000);
 //alert(s_ruleid+s_ip+s_delay+s_plr+s_type+s_direction);
-var formData = new FormData($("#form_reward")[0]);  
+var formData = new FormData($("#rewardform")[0]);  
 $.ajax({  
         type:"post", //使用post方法访问后台
         url:"/reward_upload/", //要访问的后台地址 

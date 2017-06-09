@@ -44,16 +44,16 @@
 <div  syte="width:1500">
 <div class="layout">
     <div ctyle="border-radius:4px;background-color:#f7f7f9; border:1px solid #e1e1e8;">
-        <div >
-            <form id="form_reward" enctype="multipart/form-data"  method="POST"  >
+        <div>
+            <form id="rewardform" enctype="multipart/form-data">
             	<p class="col-md">活动名称：</p>
                 <input class="col-md" id="s_activity_name" type="text" name="reward_huodong_name" value="" placeholder="活动的名称,如:2017端午活动" >
                  <p class="col-md">奖励CMake： </p>
                 <input class="col-md" id="s_cmake" type="text" name="reward_cmake" value="" placeholder="奖励的Cmake，如：2017元旦活动">
                  <p class="col-md">奖励上传： </p>
-                <input class="col-md" id="s_file" type="file"  name="myfile" >
-                <input class="btn btn-success" id="btn_upload" onclick="upload_reward()" type="button" value="上传">
+                <input class="col-md" id="s_file" type="file"  name="myfile" >       
             </form>
+            <input class="btn btn-success" id="btn_upload" onclick="upload_reward()" type="button" value="上传">
             
         </div>
     </div>

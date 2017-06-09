@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^realreward/$',views.realreward),
     url(r'^reward_upload/$', views.uploadreward),
     url(r'^rewardcheck_log/$', views.get_rewardcheck_log),
+    url(r'^test/$', views.test),
 ]
